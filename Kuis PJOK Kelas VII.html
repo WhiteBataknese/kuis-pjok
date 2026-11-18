@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kuis PJOK Kelas VII</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#eef3ee;--card:#fff;--ink:#14263a;--mute:#5b6b7a;--line:#cfd9d2;--acc:#1f6f4a;--accT:#fff;--ok:#1f7a4d;--okBg:#dff3e7;--no:#b3321f;--noBg:#fbe3df;--hots:#c2570c;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a14;--card:#182620;--ink:#e8f0ea;--mute:#9fb2a6;--line:#2c3f35;--acc:#4fbf86;--accT:#08150e;--ok:#6fdca1;--okBg:#173a28;--no:#ff9b8a;--noBg:#3e1c16;--hots:#f0a060;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1a14;--card:#182620;--ink:#e8f0ea;--mute:#9fb2a6;--line:#2c3f35;--acc:#4fbf86;--accT:#08150e;--ok:#6fdca1;--okBg:#173a28;--no:#ff9b8a;--noBg:#3e1c16;--hots:#f0a060;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Lexend,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+main{max-width:640px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.7rem;line-height:1.2;margin:8px 0 6px;font-weight:800}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.sub{color:var(--mute);font-size:.95rem;margin:0 0 16px}
+.btn{font:inherit;font-weight:600;background:var(--acc);color:var(--accT);border:0;border-radius:10px;padding:13px 20px;cursor:pointer;width:100%;font-size:1rem}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);margin-top:10px}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:10px 0 18px}
+.bar i{display:block;height:100%;background:var(--acc);transition:width .25s}
+.meta{display:flex;justify-content:space-between;font-size:.85rem;color:var(--mute)}
+.tag{font-weight:600}.tag.h{color:var(--hots)}
+.q{font-size:1.1rem;font-weight:600;margin:0 0 14px}
+.opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;font:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:9px;cursor:pointer}
+.opt b{flex:0 0 26px;height:26px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:.8rem}
+.opt.sel{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 12%,var(--card))}
+.opt.sel b{background:var(--acc);color:var(--accT);border-color:var(--acc)}
+.score{font-size:3.2rem;font-weight:800;line-height:1;margin:6px 0}
+.row{display:flex;gap:10px;margin:14px 0}
+.row div{flex:1;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:.9rem}
+.row strong{display:block;font-size:1.3rem}
+.rv{border-top:1px solid var(--line);padding:14px 0}
+.rv p{margin:0 0 8px;font-weight:600}
+.ans{font-size:.92rem;padding:7px 10px;border-radius:8px;margin-top:5px}
+.ans.ok{background:var(--okBg);color:var(--ok)}
+.ans.no{background:var(--noBg);color:var(--no)}
+.hide{display:none}
+</style>
+</head>
+<body>
+<main>
+<section id="start">
+  <h1>Kuis PJOK Kelas VII</h1>
+  <p class="sub">Konsep gerak, gaya, parabola, proyektil, keseimbangan, dan strategi gerak.</p>
+  <div class="card">
+    <p style="margin-top:0">20 soal pilihan ganda: soal 1–10 menguji ingatan dan pemahaman (C1–C2), soal 11–20 berupa soal HOTS. Jawaban dan pembahasan tampil setelah semua soal selesai.</p>
+    <label for="nama" class="sub" style="display:block;margin-bottom:6px">Nama siswa</label>
+    <input id="nama" type="text" maxlength="40" placeholder="Tulis namamu" style="width:100%;font:inherit;padding:12px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);margin-bottom:14px">
+    <button class="btn" id="mulai">Mulai kuis</button>
+  </div>
+</section>
+
+<section id="play" class="hide">
+  <div class="meta"><span id="no"></span><span id="tag" class="tag"></span></div>
+  <div class="bar"><i id="pg"></i></div>
+  <div class="card">
+    <p class="q" id="qt"></p>
+    <div id="opts"></div>
+    <button class="btn" id="next" disabled>Lanjut</button>
+    <button class="btn ghost" id="prev">Soal sebelumnya</button>
+  </div>
+</section>
+
+<section id="end" class="hide">
+  <div class="card">
+    <p class="sub" id="who" style="margin:0"></p>
+    <div class="score" id="sc"></div>
+    <p class="sub" id="msg"></p>
+    <div class="row"><div>Soal C1–C2<strong id="s1"></strong></div><div>Soal HOTS<strong id="s2"></strong></div></div>
+    <button class="btn" id="ulang">Ulangi kuis</button>
+  </div>
+  <h2 style="font-size:1.1rem;margin:22px 0 0">Pembahasan</h2>
+  <div id="rev"></div>
+</section>
+</main>
+<script>
+var Q=[
+["Perubahan posisi tubuh atau benda dari satu tempat ke tempat lain disebut...",["Gaya","Gerak","Stabilitas","Strategi"],1],
+["Dorongan atau tarikan yang dapat mengubah gerak suatu benda disebut...",["Kecepatan","Gaya","Lintasan","Keseimbangan"],1],
+["Contoh penerapan gaya tarik dalam olahraga adalah...",["Menendang bola","Menolak peluru","Menarik tali saat tarik tambang","Memukul bola kasti"],2],
+["Lintasan bola yang ditendang tinggi lalu melengkung seperti busur disebut gerak...",["Lurus","Parabola","Melingkar","Zig-zag"],1],
+["Benda yang dilemparkan ke udara dan bergerak mengikuti lintasan tertentu disebut...",["Gravitasi","Beban","Proyektil","Stabilitas"],2],
+["Kemampuan mempertahankan posisi tubuh agar tidak jatuh disebut...",["Keseimbangan","Kelincahan","Kecepatan","Kelentukan"],0],
+["Agar tubuh lebih stabil, bidang tumpu sebaiknya...",["Luas","Sempit","Berpindah-pindah","Tidak menyentuh tanah"],0],
+["Rencana atau cara yang disusun untuk mencapai tujuan dalam aktivitas gerak disebut...",["Pemanasan","Strategi gerak","Pendinginan","Peraturan"],1],
+["Mengapa atlet lompat jauh melakukan awalan berlari sebelum menolak?",["Agar terlihat gagah","Agar tidak cedera saat mendarat","Agar kecepatan awal bertambah sehingga lompatan lebih jauh","Agar tubuh menjadi lebih ringan"],2],
+["Berjalan di atas balok titian termasuk contoh keseimbangan...",["Statis","Dinamis","Pasif","Netral"],1],
+["Tiga siswa menendang bola dengan sudut berbeda dan kekuatan sama. Bola yang jatuh paling jauh biasanya ditendang dengan sudut sekitar...",["10°","25°","45°","80°"],2],
+["Andi memakai awalan lari saat melempar lembing, Budi tidak. Lemparan Andi lebih jauh. Kesimpulan yang paling tepat adalah...",["Andi lebih tinggi","Awalan menambah kecepatan awal sehingga gaya lemparan lebih besar","Lembing Budi lebih berat","Budi kurang berlatih"],1],
+["Seorang pesenam berdiri satu kaki sambil merentangkan kedua tangan. Tujuan merentangkan tangan adalah...",["Memperindah gerakan","Membantu menjaga titik berat tetap di atas bidang tumpu","Mengurangi gaya gravitasi","Memperkecil bidang tumpu"],1],
+["Penjaga gawang menekuk lutut dan merendahkan badan saat menghadapi tendangan penalti karena...",["Titik berat turun sehingga tubuh lebih stabil dan siap bergerak","Bola menjadi lebih lambat","Bidang tumpu menjadi sempit","Gaya dorong bola berkurang"],0],
+["Bola kasti dan bola basket didorong dengan gaya yang sama. Bola kasti melaju lebih cepat. Analisis yang paling tepat adalah...",["Bola kasti lebih besar","Bola kasti bermassa lebih kecil sehingga percepatannya lebih besar","Bola basket tidak terkena gaya","Gravitasi hanya bekerja pada bola basket"],1],
+["Seorang siswa lompat jauh dengan awalan cepat dan tolakan tepat, tetapi saat mendarat tubuhnya jatuh ke belakang. Bagian yang paling perlu diperbaiki adalah...",["Awalan","Tolakan","Pendaratan","Pemanasan"],2],
+["Pelari sprint lebih memilih start jongkok daripada start berdiri karena...",["Lebih santai","Titik berat rendah dan dorongan kaki ke depan lebih besar","Mengurangi jarak lari","Menghilangkan gaya gesek"],1],
+["Tim bola basket sering kebobolan karena pemain bertahan berdiri terpisah dan tidak berkomunikasi. Perbaikan strategi yang paling tepat adalah...",["Mengganti bola","Menyusun pertahanan yang saling menutup dan berkomunikasi","Mengurangi waktu latihan","Menyerang tanpa bertahan"],1],
+["Tim voli lawan lemah dalam menerima bola di sisi kiri lapangan. Strategi serangan yang paling efektif adalah...",["Mengarahkan bola ke area yang lemah","Mengarahkan bola ke pemain terkuat","Memukul bola ke luar lapangan","Tidak menyerang"],0],
+["Urutan menyusun strategi gerak yang paling tepat adalah...",["Menerapkan, menentukan tujuan, mengevaluasi, merencanakan","Menentukan tujuan, menganalisis kekuatan tim dan lawan, merencanakan, menerapkan, mengevaluasi","Mengevaluasi, menerapkan, menentukan tujuan","Merencanakan, mengevaluasi, menerapkan"],1]
+];
+var L="ABCD",cur=0,A=[];
+function $(i){return document.getElementById(i)}
+function show(id){["start","play","end"].forEach(function(s){$(s).classList.toggle("hide",s!==id)});window.scrollTo(0,0)}
+function render(){
+  var q=Q[cur];
+  $("no").textContent="Soal "+(cur+1)+" dari "+Q.length;
+  $("tag").textContent=cur<10?"C1–C2":"HOTS";
+  $("tag").className="tag"+(cur<10?"":" h");
+  $("pg").style.width=(cur/Q.length*100)+"%";
+  $("qt").textContent=q[0];
+  var o=$("opts");o.innerHTML="";
+  q[1].forEach(function(t,i){
+    var b=document.createElement("button");
+    b.className="opt"+(A[cur]===i?" sel":"");
+    b.innerHTML="<b>"+L[i]+"</b><span></span>";
+    b.lastChild.textContent=t;
+    b.onclick=function(){A[cur]=i;render()};
+    o.appendChild(b);
+  });
+  $("next").disabled=A[cur]===undefined;
+  $("next").textContent=cur===Q.length-1?"Selesai dan lihat skor":"Lanjut";
+  $("prev").style.display=cur===0?"none":"block";
+}
+function finish(){
+  var s1=0,s2=0,r=$("rev");r.innerHTML="";
+  Q.forEach(function(q,i){
+    var ok=A[i]===q[2];
+    if(ok){if(i<10)s1++;else s2++}
+    var d=document.createElement("div");d.className="rv";
+    var p=document.createElement("p");p.textContent=(i+1)+". "+q[0];d.appendChild(p);
+    var a=document.createElement("div");a.className="ans "+(ok?"ok":"no");
+    a.textContent=ok?"Benar: "+L[q[2]]+". "+q[1][q[2]]:"Jawabanmu: "+L[A[i]]+". "+q[1][A[i]];
+    d.appendChild(a);
+    if(!ok){var k=document.createElement("div");k.className="ans ok";k.textContent="Jawaban benar: "+L[q[2]]+". "+q[1][q[2]];d.appendChild(k)}
+    r.appendChild(d);
+  });
+  var t=s1+s2,n=$("nama").value.trim();
+  $("who").textContent=n?"Hasil kuis "+n:"Hasil kuis";
+  $("sc").textContent=(t*5)+"/100";
+  $("s1").textContent=s1+" dari 10";$("s2").textContent=s2+" dari 10";
+  $("msg").textContent=t>=17?"Luar biasa! Pemahamanmu sangat baik.":t>=12?"Bagus! Pelajari lagi soal yang masih salah.":"Ayo belajar lagi, lalu coba ulangi kuisnya.";
+  show("end");
+}
+$("mulai").onclick=function(){cur=0;A=[];show("play");render()};
+$("next").onclick=function(){if(cur<Q.length-1){cur++;render()}else finish()};
+$("prev").onclick=function(){if(cur>0){cur--;render()}};
+$("ulang").onclick=function(){show("start")};
+</script>
+</body>
+</html>
